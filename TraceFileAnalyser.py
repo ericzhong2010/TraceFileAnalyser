@@ -45,7 +45,6 @@ class MY_GUI():
 
         # 日志文件路径
         self.get_filepath = StringVar()
-        #
 
     # 获得文件目录
     def get_file(self):
@@ -101,7 +100,9 @@ class MY_GUI():
         list_total = []
         list_sql = []
         list_overall = ""
-        text2 = ""
+        tmp_exec = 0.0
+        tmp_fetc = 0.0
+        tmp_total = 0.0
         fo = open(self.filename, "r+")
         try:
             while True:
@@ -140,16 +141,19 @@ class MY_GUI():
                             value = re.findall(
                                 r'Execute \s+ ([0-9]\d*)\s+([0-9]\d*\.\d{2})\s+([0-9]\d*\.\d{2})\s+ ([0-9]\d*)\s+ ([0-9]\d*)\s+ ([0-9]\d*)\s+ ([0-9]\d*)',
                                 text, re.M | re.I)
-                            list_exec.append(float(value[0][2]))
+                            tmp_exec = float(value[0][2])
+                            list_exec.append(tmp_exec)
                         # 过滤Fetch值并赋值到list_fetch列表
                         if text.startswith("Fetch") == True:
                             value2 = re.findall(
                                 r'Fetch \s+ ([0-9]\d*)\s+([0-9]\d*\.\d{2})\s+([0-9]\d*\.\d{2})\s+ ([0-9]\d*)\s+ ([0-9]\d*)\s+ ([0-9]\d*)\s+ ([0-9]\d*)',
                                 text, re.M | re.I)
-                            list_fetch.append(float(value[0][2]))
+                            tmp_fetc = float(value2[0][2])
+                            list_fetch.append(tmp_fetc)
                         text = fo.readline()
+                    tmp_total = tmp_exec + tmp_fetc
                     list_sql.append(text2)
-                    list_total.append(float(value[0][2]) + float(value[0][2]))
+                    list_total.append(tmp_total)
                     list_no.append(num - 1)
                     num += 1
         finally:
